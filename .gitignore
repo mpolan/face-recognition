@@ -1,3 +1,4 @@
 venv
 **/error_face
 dataset/michal
+dataset/val/michal*
