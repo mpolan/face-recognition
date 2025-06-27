@@ -8,8 +8,8 @@ with open('data/model_knn.pkl', 'rb') as f:
     knn = pickle.load(f)
 
 val_folder = 'dataset/val/'
-total = 0
-correct = 0
+total = 0 # Wszystgkie
+correct = 0 # Poprawne
 
 for person in os.listdir(val_folder):
     person_path = os.path.join(val_folder, person)
@@ -28,11 +28,11 @@ for person in os.listdir(val_folder):
             print(f"Type: {type(embedding)}")
 
             if embedding and isinstance(embedding, list) and 'embedding' in embedding[0]:
-                embedding_vector = embedding[0]["embedding"]
-                predicted_label = knn.predict([embedding_vector])[0]
+                embedding_vector = embedding[0]["embedding"] # Sam wektor
+                predicted_label = knn.predict([embedding_vector])[0] # Predykcja labela poprzez KNN
                 print(f"Plik: {img_path} | Prawdziwa: {person} | Predykcja: {predicted_label}")
                 if predicted_label == person:
-                    correct += 1
+                    correct += 1 # Poprawna
                 total += 1
             else:
                 print(f"Brak embeddingu dla: {img_path}")
@@ -41,4 +41,4 @@ for person in os.listdir(val_folder):
             print(f"Nie udało się przetworzyć: {img_path}, błąd: {e}")
 
 accuracy = correct / total if total > 0 else 0
-print(f"Dokładność na zbiorze walidacyjnym: {accuracy:.2%}")
+print(f"Dokładność na zbiorze walidacyjnym: {accuracy:.2%}") # Dokładność końcowa

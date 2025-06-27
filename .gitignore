@@ -2,3 +2,4 @@ venv
 **/error_face
 dataset/michal
 dataset/val/michal*
+**__pycache__
