@@ -11,6 +11,9 @@ val_folder = 'dataset/val/'
 total = 0 # Wszystgkie
 correct = 0 # Poprawne
 
+Y_true = []
+Y_pred = []
+
 for person in os.listdir(val_folder):
     person_path = os.path.join(val_folder, person)
     if not os.path.isdir(person_path):
@@ -31,8 +34,13 @@ for person in os.listdir(val_folder):
                 embedding_vector = embedding[0]["embedding"] # Sam wektor
                 predicted_label = knn.predict([embedding_vector])[0] # Predykcja labela poprzez KNN
                 print(f"Plik: {img_path} | Prawdziwa: {person} | Predykcja: {predicted_label}")
+
+                Y_true.append(person)
+                Y_pred.append(predicted_label)
+
                 if predicted_label == person:
                     correct += 1 # Poprawna
+
                 total += 1
             else:
                 print(f"Brak embeddingu dla: {img_path}")
@@ -42,3 +50,14 @@ for person in os.listdir(val_folder):
 
 accuracy = correct / total if total > 0 else 0
 print(f"Dokładność na zbiorze walidacyjnym: {accuracy:.2%}") # Dokładność końcowa
+
+from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
+import matplotlib.pyplot as plt
+
+if total > 0:
+    cm = confusion_matrix(Y_true, Y_pred, labels=sorted(set(Y_true)))
+    disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=sorted(set(Y_true)))
+    disp.plot(cmap=plt.cm.Blues)
+    plt.title(f"Confusion Matrix (Accuracy: {accuracy:.2%})")
+    plt.xticks(rotation=45)
+    plt.show()
